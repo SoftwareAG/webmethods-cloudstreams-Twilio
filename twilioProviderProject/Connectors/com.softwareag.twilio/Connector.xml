@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:Connector xmlns:ns2="http://cloudstreams.com/connector" name="com.softwareag.twilio" displayName="com.softwareag.twilio" version="0.1" group="twilio">
+    <description></description>
+    <descriptorfile>com.softwareag.twilio.xml</descriptorfile>
+    <createdByPlugin>9.12</createdByPlugin>
+    <createdByPluginChecksum>5f278033ef8c4ece9dfd824d2138c055d0e36</createdByPluginChecksum>
+    <createdOnIS>9.12</createdOnIS>
+    <createdOnISChecksum>41b39c4c70f57b2d7ad426cc4121e4cce25e21</createdOnISChecksum>
+    <key>com.softwareag.twilio</key>
+    <bundlevendor>Software AG</bundlevendor>
+    <handler>com.softwareag.cloudstreams.metadata.handler.rest.RestConnectorMetadataHandler</handler>
+    <deployment>
+        <cloudstreamservers targetKey="c342a56d-1686-41eb-b1f6-c22536f17ff1">
+            <ipaddress>localhost</ipaddress>
+        </cloudstreamservers>
+        <providerpackage>twilio</providerpackage>
+    </deployment>
+    <deploymentStatus>Deployed</deploymentStatus>
+</ns2:Connector>

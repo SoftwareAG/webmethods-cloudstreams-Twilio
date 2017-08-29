@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:ConnectorList xmlns:ns2="http://cloudstreams.com/connector">
+    <Connector>
+        <name>com.softwareag.twilio</name>
+        <uuid>com.softwareag.twilio</uuid>
+        <version>0.1</version>
+    </Connector>
+    <ProviderPackage>twilio</ProviderPackage>
+    <Description></Description>
+    <Publisher>Software AG</Publisher>
+</ns2:ConnectorList>

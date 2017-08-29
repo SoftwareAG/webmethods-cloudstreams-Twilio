@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rest-connector xmlns="http://www.softwareag.com/cloudstreams/metadata/handler/model" id="com.softwareag.twilio" version="0.1" group="twilio" name="com.softwareag.twilio" displayName="com.softwareag.twilio">
+    <description></description>
+    <connections>
+        <connection type="sagcloud" name="Connection1" displayName="Connection1">
+            <groups>
+                <group type="connection" name="connection" displayName="connection">
+                    <description>Define the required connection configurations to initiate communication with the SaaS provider.</description>
+                    <fields>
+                        <field defaultValue="https://api.twilio.com/2010-04-01" name="cn.providerUrl" displayName="Server URL"/>
+                        <field defaultValue="30000" name="cn.connectTimeout" displayName="Connection TimeOut"/>
+                        <field defaultValue="30000" name="cn.readTimeout" displayName="Socket Read Timeout"/>
+                        <field defaultValue="false" name="cn.socketStaleCheck" displayName="Use Stale Checking"/>
+                        <field defaultValue="1" name="cn.retryCount" displayName="Connection Retry Count"/>
+                        <field defaultValue="false" name="cn.retryIfRequestSentOk" displayName="Retry on Response Failure"/>
+                        <field defaultValue="false" name="cn.tcpNoDelay" displayName="Use TCP NoDelay"/>
+                        <field defaultValue="-1" name="cn.socketLinger" displayName="Socket Linger"/>
+                        <field defaultValue="8192" name="cn.sockBuffSize" displayName="Socket Buffer Size"/>
+                        <field defaultValue="false" name="cn.reuseAddr" displayName="Socket Reuse Address"/>
+                        <field defaultValue="org.apache.http.conn.ssl.StrictHostnameVerifier" name="cn.hostnameVerifier" displayName="Hostname verifier"/>
+                    </fields>
+                </group>
+                <group type="credentials" name="credentials" displayName="Credentials">
+                    <description>Define configurations needed for the username and password based authentication to the SaaS provider.</description>
+                    <fields>
+                        <field defaultValue="basic" name="cr.authSchemeType" displayName="Authorization Type"/>
+                        <field defaultValue="true" name="cr.preemptiveAuthEnabled" displayName="Preemptive Auth"/>
+                    </fields>
+                </group>
+                <group type="requestHeaders" name="requestHeaders" displayName="Request Headers">
+                    <description>Define the HTTP request header contents that will be used while making a request to a SaaS provider.</description>
+                    <fields>
+                        <field defaultValue="Content-Type" name="rh.requestHeaderNames" displayName="Request Header Names"/>
+                        <field defaultValue="application/x-www-form-urlencoded" name="rh.requestHeaderValues" displayName="Request Header Values"/>
+                    </fields>
+                </group>
+            </groups>
+            <start/>
+            <stop/>
+        </connection>
+    </connections>
+    <services>
+        <service xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="RESTServiceType" endpoint="${cn.providerUrl}" name="sendSMS" displayName="sendSMS">
+            <documentModel packageName="twilio" nsName="wmtwilio.doc" useInlineModel="false"/>
+            <resources>
+                <resource method="POST" path="/Accounts/{sid}/Messages.json" name="sendSMS" displayName="sendSMS">
+                    <mappings>
+                        <map isRequired="true" isFixed="true" context="IN" name="sidMapping" displayName="sidMapping">
+                            <source type="IDATA">cr.username</source>
+                            <target type="PARAMETER">sid</target>
+                        </map>
+                    </mappings>
+                    <parameters>
+                        <parameter name="sid" isRequired="true" style="URI_CONTEXT"/>
+                        <parameter name="To" isRequired="true" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="From" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="MessagingServiceSid" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="Body" isRequired="true" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="MediaUrl" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="StatusCallback" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="ApplicationSid" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="MaxPrice" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="ProvideFeedback" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="ValidityPeriod" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                    </parameters>
+                    <responses>
+                        <response name="Success" code="201" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:sendSMSResponse" excludeRoot="true"/>
+                        <response name="Error" code="400-405" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:ErrorResponse" excludeRoot="true"/>
+                    </responses>
+                </resource>
+                <resource method="GET" path="/Accounts/{AccountSid}/Messages/{MessageSid}.json" name="getSMS" displayName="getSMS">
+                    <mappings>
+                        <map isRequired="true" isFixed="true" context="IN" name="AccounSidMapping" displayName="AccounSidMapping">
+                            <source type="IDATA">cr.username</source>
+                            <target type="PARAMETER">AccountSid</target>
+                        </map>
+                    </mappings>
+                    <parameters>
+                        <parameter name="MessageSid" isRequired="true" style="URI_CONTEXT"/>
+                        <parameter name="AccountSid" isRequired="true" style="URI_CONTEXT"/>
+                    </parameters>
+                    <responses>
+                        <response name="Success" code="200" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:sendSMSResponse" excludeRoot="true"/>
+                        <response name="Error" code="400-405" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:ErrorResponse" excludeRoot="true"/>
+                    </responses>
+                </resource>
+            </resources>
+        </service>
+        <service xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="RESTServiceType" endpoint="${cn.providerUrl}" name="Account" displayName="Account">
+            <documentModel packageName="twilio" nsName="wmtwilio.doc" useInlineModel="false"/>
+            <resources>
+                <resource method="GET" path="/Accounts/{sid}.json" name="getAccount" displayName="getAccount">
+                    <mappings>
+                        <map isRequired="true" isFixed="true" context="IN" name="SidMapping" displayName="SidMapping">
+                            <source type="IDATA">cr.username</source>
+                            <target type="PARAMETER">sid</target>
+                        </map>
+                    </mappings>
+                    <parameters>
+                        <parameter name="sid" isRequired="true" style="URI_CONTEXT"/>
+                    </parameters>
+                    <responses>
+                        <response name="Success" code="200" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:getAccountResponse" excludeRoot="true"/>
+                        <response name="Error" code="400-405" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:ErrorResponse" excludeRoot="true"/>
+                    </responses>
+                </resource>
+            </resources>
+        </service>
+        <service xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="RESTServiceType" endpoint="${cn.providerUrl}" name="MakeCall" displayName="MakeCall">
+            <documentModel packageName="twilio" nsName="wmtwilio.doc" useInlineModel="false"/>
+            <resources>
+                <resource method="POST" path="/Accounts/{AccountSid}/Calls.json" name="MakeCall" displayName="MakeCall">
+                    <mappings>
+                        <map isRequired="true" isFixed="true" context="IN" name="AccountSid" displayName="AccountSid">
+                            <source type="IDATA">cr.username</source>
+                            <target type="PARAMETER">AccountSid</target>
+                        </map>
+                    </mappings>
+                    <parameters>
+                        <parameter name="AccountSid" isRequired="true" style="URI_CONTEXT"/>
+                        <parameter name="From" isRequired="true" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="To" isRequired="true" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="Url" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="ApplicationSid" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="Method" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="FallbackUrl" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="FallbackMethod" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="StatusCallback" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="StatusCallbackMethod" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="StatusCallbackEvent" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="SendDigits" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="MachineDetection" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="MachineDetectionTimeout" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="Timeout" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="Record" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="RecordingChannels" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="RecordingStatusCallback" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                        <parameter name="RecordingStatusCallbackMethod" isRequired="false" style="FORM_ENCODED_PARAM"/>
+                    </parameters>
+                    <responses>
+                        <response name="Success" code="201" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:MakeCallResponse" excludeRoot="true"/>
+                        <response name="Error" code="400-405" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:ErrorResponse" excludeRoot="true"/>
+                    </responses>
+                </resource>
+                <resource method="GET" path="/Accounts/{AccountSid}/Calls/{CallSid}.json" name="GetCall" displayName="GetCall">
+                    <mappings>
+                        <map isRequired="true" isFixed="true" context="IN" name="AccountSidMapping" displayName="AccountSidMapping">
+                            <source type="IDATA">cr.username</source>
+                            <target type="PARAMETER">AccountSid</target>
+                        </map>
+                    </mappings>
+                    <parameters>
+                        <parameter name="CallSid" isRequired="true" style="URI_CONTEXT"/>
+                        <parameter name="AccountSid" isRequired="true" style="URI_CONTEXT"/>
+                    </parameters>
+                    <responses>
+                        <response name="Success" code="200" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:MakeCallResponse" excludeRoot="true"/>
+                        <response name="Error" code="400-405" messageFormatterType="application/octet+idataoref" builderType="application/json" documentRef="wmtwilio.doc:ErrorResponse" excludeRoot="true"/>
+                    </responses>
+                </resource>
+            </resources>
+        </service>
+    </services>
+</rest-connector>

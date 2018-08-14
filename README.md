@@ -5,7 +5,7 @@ This project provides a sample webMethods CloudStreams Provider Project for Twil
 * **Get Account:** An Account instance resource represents a single Twilio account. https://www.twilio.com/docs/api/rest/account
 * **Make Call:** Make outgoing call to phones, SIP-enabled endpoints and Twilio Client connections. https://www.twilio.com/docs/api/rest/making-calls
 * **Get Call:** A Call instance resource represents a connection between a telephone and Twilio. https://www.twilio.com/docs/api/rest/call
-
+ 
 ## Requirements
 
 The project was developed and tested on the following installation:
